@@ -5,10 +5,9 @@ import 'package:shop_app/providers/provider_products.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/model_product.dart';
 // widget
-import '../../../widgets/tappable/tappable_icon.dart';
-
+import '../../../widgets/tappable_icon.dart';
 // screens
-import '../../productDetail/screen_productDetail.dart';
+import '../../product_detail/screen_productDetail.dart';
 
 class ProductItemListTile extends StatelessWidget {
   void _pushToDetailScreen({BuildContext context, String id}) {
@@ -29,7 +28,10 @@ class ProductItemListTile extends StatelessWidget {
 
     return Consumer<Product>(
       builder: (BuildContext context, Product product, Widget child) => InkWell(
-        onTap: () => onTap(product, provider),
+        onTap: () => _pushToDetailScreen(
+          context: context,
+          id: product.id,
+        ),
         child: Card(
           margin: const EdgeInsets.symmetric(vertical: 10.0),
           elevation: 5,

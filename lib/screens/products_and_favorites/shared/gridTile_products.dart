@@ -2,13 +2,14 @@
 import 'package:flutter/material.dart';
 // provider
 import 'package:provider/provider.dart';
+import 'package:shop_app/providers/provider_carts.dart';
 import 'package:shop_app/providers/provider_products.dart';
 import '../../../providers/model_product.dart';
 // widget
-import '../../../widgets/tappable/tappable_icon.dart';
+import '../../../widgets/tappable_icon.dart';
 
 // screens
-import '../../productDetail/screen_productDetail.dart';
+import '../../product_detail/screen_productDetail.dart';
 
 class ProductItemGridTile extends StatelessWidget {
   void _pushToDetailScreen({BuildContext context, String id}) {
@@ -21,10 +22,28 @@ class ProductItemGridTile extends StatelessWidget {
     provider.toggleFavorite(product.id);
   }
 
+  void onShoppingCartTap({
+    @required ProviderCarts provider,
+    @required String id,
+    @required String title,
+    @required double price,
+  }) {
+    provider.addItem(
+      id: id,
+      title: title,
+      price: price,
+    );
+  }
+
+  bool isInCart({@required ProviderCarts provider, @required String id}) {
+    return provider.findById(id: id);
+  }
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final provider = Provider.of<ProviderProducts>(context, listen: false);
+    final providerProducts =
+        Provider.of<ProviderProducts>(context, listen: false);
     final product = Provider.of<Product>(context, listen: false);
     // This listener (Provider.of()) make this widget rebuild any time its data
     // changes (think of a toggle isFavorite property).
@@ -56,12 +75,24 @@ class ProductItemGridTile extends StatelessWidget {
           header: GridTileBar(
             trailing: CircleAvatar(
               backgroundColor: Colors.black26,
-              child: IconButton(
-                icon: Icon(
-                  Icons.shopping_cart,
-                  color: theme.accentColor,
+              child: Consumer<ProviderCarts>(
+                builder: (BuildContext context, ProviderCarts providerCarts,
+                        Widget widget) =>
+                    TappableIcon(
+                  condition: isInCart(
+                    provider: providerCarts,
+                    id: product.id,
+                  ),
+                  ifFalse: Icons.add_shopping_cart,
+                  ifTrue: Icons.shopping_cart,
+                  onPressed: () => onShoppingCartTap(
+                    provider: providerCarts,
+                    id: product.id,
+                    title: product.title,
+                    price: product.price,
+                  ),
+                  theme: theme,
                 ),
-                onPressed: null,
               ),
             ),
           ),
@@ -84,7 +115,7 @@ class ProductItemGridTile extends StatelessWidget {
                   // on changes of this product
                   return TappableIcon(
                     condition: product.isFavorite,
-                    onPressed: () => onTap(product, provider),
+                    onPressed: () => onTap(product, providerProducts),
                     ifTrue: Icons.favorite,
                     ifFalse: Icons.favorite_border,
                     theme: theme,

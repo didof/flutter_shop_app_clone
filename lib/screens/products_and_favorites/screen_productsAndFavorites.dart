@@ -1,9 +1,11 @@
 // flutter
 import 'package:flutter/material.dart';
 // sub screens
-import './productsOverview/subscreen_productsOverview.dart';
-import './favorites/subscreen_favorites.dart';
-import 'popupMenuButton.dart';
+import 'productsOverview/subscreen_productsOverview.dart';
+import 'favorites/subscreen_favorites.dart';
+// appBar actions
+import 'actions/popupMenuButton.dart';
+import 'actions/cartActionButton.dart';
 
 class ScreenProductsAndFavorites extends StatefulWidget {
   static const routeName = '/';
@@ -42,6 +44,7 @@ class _ScreenProductsAndFavoritesState
           return Scaffold(
             appBar: AppBar(
               title: Text(_appBarTitle),
+              elevation: 5,
               bottom: TabBar(
                 onTap: _updateAppBarTitle,
                 indicatorWeight: 3.0,
@@ -54,7 +57,10 @@ class _ScreenProductsAndFavoritesState
                   );
                 }).toList(),
               ),
-              actions: [PopupMenuButtonProductsOverview()],
+              actions: [
+                CartActionButton(),
+                PopupMenuButtonProductsOverview(),
+              ],
             ),
             body: TabBarView(
                 children:

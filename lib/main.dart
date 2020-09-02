@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './providers/provider_products.dart';
 import './providers/provider_UI.dart';
+import 'providers/provider_carts.dart';
 // screens
-import './screens/productDetail/screen_productDetail.dart';
-// import './screens/productsOverview/screen_productsOverview.dart';
+import 'screens/product_detail/screen_productDetail.dart';
 import 'screens/products_and_favorites/screen_productsAndFavorites.dart';
+import 'screens/shopping_cart/screen_shoppingCart.dart';
 
 void main() {
   // SystemChrome.setPreferredOrientations([
@@ -24,6 +25,7 @@ class App extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => ProviderProducts()),
         ChangeNotifierProvider(create: (_) => ProviderUI()),
+        ChangeNotifierProvider(create: (_) => ProviderCarts()),
       ],
       child: MaterialApp(
         title: 'Shop App',
@@ -37,8 +39,8 @@ class App extends StatelessWidget {
         routes: {
           ScreenProductsAndFavorites.routeName: (_) =>
               ScreenProductsAndFavorites(),
-          // ScreenProductsOverview.routeName: (_) => ScreenProductsOverview(),
           ScreenProductDetail.routeName: (_) => ScreenProductDetail(),
+          ScreenShoppingCart.routeName: (_) => ScreenShoppingCart(),
         },
       ),
     );

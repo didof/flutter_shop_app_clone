@@ -1,9 +1,9 @@
 // flutter
 import 'package:flutter/material.dart';
 // utils
-import '../../utils/enums.dart';
+import '../../../utils/enums.dart';
 // provider
-import '../../providers/provider_UI.dart';
+import '../../../providers/provider_UI.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
