@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 // provider
 import 'package:provider/provider.dart';
 import '../../../providers/provider_products.dart';
-import '../../../providers/model_product.dart';
+import '../../../models/model_product.dart';
 // widget
 import 'listTile_products.dart';
 

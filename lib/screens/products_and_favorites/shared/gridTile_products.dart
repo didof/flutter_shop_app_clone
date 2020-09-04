@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/providers/provider_carts.dart';
 import 'package:shop_app/providers/provider_products.dart';
-import '../../../providers/model_product.dart';
+import '../../../models/model_product.dart';
 // widget
 import '../../../widgets/tappable_icon.dart';
 

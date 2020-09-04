@@ -1,5 +1,5 @@
 // models
-import '../../providers/model_product.dart';
+import '../../models/model_product.dart';
 
 final databaseProducts = [
   Product(

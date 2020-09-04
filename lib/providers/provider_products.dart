@@ -1,7 +1,7 @@
 // flutter
 import 'package:flutter/material.dart';
 // model
-import 'model_product.dart';
+import '../models/model_product.dart';
 // data
 import '../assets/data/data_products.dart';
 

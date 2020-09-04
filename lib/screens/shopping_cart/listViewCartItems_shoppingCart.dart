@@ -7,7 +7,7 @@ import '../../providers/provider_carts.dart' show ProviderCarts;
 class ListViewCartItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<ProviderCarts>(context, listen: false);
+    final provider = Provider.of<ProviderCarts>(context, listen: true);
     final items = provider.itemsList;
     final keys = provider.itemsIds;
 

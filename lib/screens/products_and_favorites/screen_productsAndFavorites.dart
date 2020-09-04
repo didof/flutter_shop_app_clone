@@ -1,5 +1,6 @@
 // flutter
 import 'package:flutter/material.dart';
+import 'package:shop_app/widgets/drawer.dart';
 // sub screens
 import 'productsOverview/subscreen_productsOverview.dart';
 import 'favorites/subscreen_favorites.dart';
@@ -9,6 +10,12 @@ import 'actions/cartActionButton.dart';
 
 class ScreenProductsAndFavorites extends StatefulWidget {
   static const routeName = '/';
+  static const label = 'Products';
+  static const icon = Icons.shop;
+
+  String get route {
+    return routeName;
+  }
 
   @override
   _ScreenProductsAndFavoritesState createState() =>
@@ -63,8 +70,10 @@ class _ScreenProductsAndFavoritesState
               ],
             ),
             body: TabBarView(
-                children:
-                    choices.map<Widget>((TabBarChoice c) => c.screen).toList()),
+              children:
+                  choices.map<Widget>((TabBarChoice c) => c.screen).toList(),
+            ),
+            drawer: CustomDrawer(),
           );
         },
       ),

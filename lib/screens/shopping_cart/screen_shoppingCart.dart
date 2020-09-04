@@ -6,7 +6,8 @@ import './listViewCartItems_shoppingCart.dart';
 
 class ScreenShoppingCart extends StatelessWidget {
   static const routeName = '/cart';
-  static const appBarTitle = 'Shopping Cart';
+  static const label = 'Cart';
+  static const icon = Icons.shopping_cart;
 
   Widget _buildCard({@required Widget child, @required double height}) {
     return Container(
@@ -25,7 +26,7 @@ class ScreenShoppingCart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(appBarTitle),
+        title: Text(label),
       ),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) => Column(
