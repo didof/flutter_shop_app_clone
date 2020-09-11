@@ -1,21 +1,31 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_app/models/model_product.dart';
+import 'package:shop_app/providers/provider_products.dart';
 
 class EditorUserProducts extends StatefulWidget {
-  const EditorUserProducts({Key key}) : super(key: key);
+  final String id;
+  const EditorUserProducts({Key key, this.id}) : super(key: key);
 
   @override
   _EditorUserProductsState createState() => _EditorUserProductsState();
 }
 
 class _EditorUserProductsState extends State<EditorUserProducts> {
+  final _imageUrlController = TextEditingController();
   final _priceFocusNode = FocusNode();
   final _descriptionFocusNode = FocusNode();
   final _imageUrlFocusNode = FocusNode();
-  final _imageUrlController = TextEditingController();
   final _form = GlobalKey<FormState>();
+  var _isInit = true;
+  var _initValues = {
+    'title': '',
+    'price': '',
+    'description': '',
+    'imageURL': '',
+  };
   var _editedProduct = Product(
     id: null,
     title: '',
@@ -28,6 +38,25 @@ class _EditorUserProductsState extends State<EditorUserProducts> {
     if (!_imageUrlFocusNode.hasFocus) {
       setState(() {});
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    print('didChangeDependencies first time: $_isInit');
+    if (!_isInit) return;
+
+    _editedProduct = Provider.of<ProviderProducts>(context).findById(widget.id);
+    print('id: ${widget.id}');
+    _initValues = {
+      'title': _editedProduct.title,
+      'price': _editedProduct.price.toString(),
+      'description': _editedProduct.description,
+      'imageUrl': '',
+    };
+    print(_initValues['title']);
+    _imageUrlController.text = _editedProduct.imageUrl;
+    _isInit = true;
+    super.didChangeDependencies();
   }
 
   @override
@@ -55,10 +84,14 @@ class _EditorUserProductsState extends State<EditorUserProducts> {
     final isNotValid = !_form.currentState.validate();
     if (isNotValid) return;
     _form.currentState.save();
-    print(_editedProduct.title);
-    print(_editedProduct.description);
-    print(_editedProduct.price);
-    print(_editedProduct.imageUrl);
+    final provider = Provider.of<ProviderProducts>(context, listen: false);
+    if (widget.id == '') {
+      provider.addProduct(_editedProduct);
+    } else {
+      print(_editedProduct.id);
+      provider.updateProduct(_editedProduct);
+    }
+    Navigator.of(context).pop();
   }
 
   @override
@@ -71,6 +104,7 @@ class _EditorUserProductsState extends State<EditorUserProducts> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             TextFormField(
+              initialValue: _initValues['title'],
               decoration: InputDecoration(
                 labelText: 'Title',
               ),
@@ -80,7 +114,7 @@ class _EditorUserProductsState extends State<EditorUserProducts> {
                   FocusScope.of(context).requestFocus(_priceFocusNode),
               onSaved: (newValue) {
                 _editedProduct = Product(
-                  id: null,
+                  id: widget.id != null ? widget.id : null,
                   title: newValue,
                   description: _editedProduct.description,
                   price: _editedProduct.price,
@@ -94,6 +128,7 @@ class _EditorUserProductsState extends State<EditorUserProducts> {
             ),
             _spacer,
             TextFormField(
+              initialValue: _initValues['price'],
               decoration: InputDecoration(
                 labelText: 'Price',
               ),
@@ -104,7 +139,7 @@ class _EditorUserProductsState extends State<EditorUserProducts> {
                   FocusScope.of(context).requestFocus(_descriptionFocusNode),
               onSaved: (newValue) {
                 _editedProduct = Product(
-                  id: null,
+                  id: widget.id != null ? widget.id : null,
                   title: _editedProduct.title,
                   description: _editedProduct.description,
                   price: double.parse(newValue),
@@ -122,6 +157,7 @@ class _EditorUserProductsState extends State<EditorUserProducts> {
             ),
             _spacer,
             TextFormField(
+              initialValue: _initValues['description'],
               maxLines: 3,
               keyboardType: TextInputType.multiline,
               decoration: InputDecoration(
@@ -130,7 +166,7 @@ class _EditorUserProductsState extends State<EditorUserProducts> {
               focusNode: _descriptionFocusNode,
               onSaved: (newValue) {
                 _editedProduct = Product(
-                  id: null,
+                  id: widget.id != null ? widget.id : null,
                   title: _editedProduct.title,
                   description: newValue,
                   price: _editedProduct.price,
@@ -204,7 +240,7 @@ class _EditorUserProductsState extends State<EditorUserProducts> {
                     focusNode: _imageUrlFocusNode,
                     onSaved: (newValue) {
                       _editedProduct = Product(
-                        id: null,
+                        id: widget.id != null ? widget.id : null,
                         title: _editedProduct.title,
                         description: _editedProduct.description,
                         price: _editedProduct.price,
@@ -213,13 +249,13 @@ class _EditorUserProductsState extends State<EditorUserProducts> {
                     },
                     validator: (value) {
                       if (value.isEmpty) return 'imageUrl is required';
-                      if (!value.startsWith('http') ||
+                      if (!value.startsWith('http') &&
                           !value.startsWith('https'))
-                        return 'please enter a valid URL';
-                      if (!value.endsWith('.jpg') ||
-                          !value.endsWith('.jpeg') ||
+                        return 'please enter a valid URL (start)';
+                      if (!value.endsWith('.jpg') &&
+                          !value.endsWith('.jpeg') &&
                           !value.endsWith('.png'))
-                        return 'please enter a valid URL';
+                        return 'please enter a valid URL (end)';
                       return null;
                     },
                   ),
@@ -241,3 +277,5 @@ class _EditorUserProductsState extends State<EditorUserProducts> {
     );
   }
 }
+
+// TODO: refactoring

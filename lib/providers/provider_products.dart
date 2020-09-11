@@ -29,8 +29,23 @@ class ProviderProducts with ChangeNotifier {
     notifyListeners();
   }
 
-  void addProduct(value) {
-    // _items.add(value);
+  void addProduct(Product product) {
+    final newProduct = Product(
+      id: DateTime.now().toString(),
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      imageUrl: product.imageUrl,
+    );
+    _products.add(newProduct);
+    notifyListeners();
+  }
+
+  void updateProduct(Product updatedProduct) {
+    final index = _products.indexWhere((p) => p.id == updatedProduct.id);
+    if (index < 0)
+      throw AssertionError('[updateProduct] received negative index');
+    _products[index] = updatedProduct;
     notifyListeners();
   }
 }

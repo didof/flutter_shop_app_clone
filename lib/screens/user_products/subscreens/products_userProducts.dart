@@ -4,7 +4,8 @@ import 'package:shop_app/providers/provider_products.dart';
 import 'package:shop_app/screens/product_detail/screen_productDetail.dart';
 
 class ProductsUserProducts extends StatefulWidget {
-  const ProductsUserProducts({Key key}) : super(key: key);
+  final Function shiftTab;
+  const ProductsUserProducts({Key key, this.shiftTab}) : super(key: key);
 
   @override
   _ProductsUserProductsState createState() => _ProductsUserProductsState();
@@ -37,6 +38,7 @@ class _ProductsUserProductsState extends State<ProductsUserProducts> {
           selected: _selectedTile == i ? true : false,
           index: i,
           onTap: _selectTile,
+          onEdit: widget.shiftTab,
         );
         if (i == 0) {
           return Container(
@@ -54,6 +56,7 @@ class ListItem extends StatelessWidget {
   final String title;
   final String imageUrl;
   final Function onTap;
+  final Function onEdit;
   final int index;
   bool selected;
 
@@ -64,6 +67,7 @@ class ListItem extends StatelessWidget {
     @required this.imageUrl,
     @required this.selected,
     @required this.onTap,
+    @required this.onEdit,
     @required this.index,
   }) : super(key: key);
 
@@ -99,7 +103,7 @@ class ListItem extends StatelessWidget {
                   children: <Widget>[
                     IconButton(
                       icon: Icon(Icons.edit),
-                      onPressed: () {},
+                      onPressed: () => onEdit(1, productId: id),
                       color: theme.primaryColor,
                     ),
                     IconButton(

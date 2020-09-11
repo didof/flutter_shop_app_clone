@@ -17,28 +17,20 @@ class ScreenUserProducts extends StatefulWidget {
 
 class _ScreenUserProductsState extends State<ScreenUserProducts> {
   var _currentIndex = 0;
+  var _editorProductId = '';
 
   Widget _buildSubscreens(int i) {
     if (i == 0) {
-      return ProductsUserProducts();
+      return ProductsUserProducts(shiftTab: _shiftTab);
     } else {
-      return EditorUserProducts();
+      return EditorUserProducts(id: _editorProductId);
     }
   }
 
-  // List<Widget> _buildActions(int i) {
-  //   if (i == 0) {
-  //     return null;
-  //   } else {
-  //     return [
-  //       IconButton(icon: Icon(Icons.add), onPressed: _saveForm),
-  //     ];
-  //   }
-  // }
-
-  void _shiftTab(int index) {
+  void _shiftTab(int index, {String productId = ''}) {
     setState(() {
       _currentIndex = index;
+      _editorProductId = productId;
     });
   }
 
@@ -48,7 +40,6 @@ class _ScreenUserProductsState extends State<ScreenUserProducts> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(ScreenUserProducts.label),
-          // actions: _buildActions(_currentIndex),
         ),
         drawer: CustomDrawer(),
         drawerScrimColor: Theme.of(context).primaryColor.withOpacity(0.1),
