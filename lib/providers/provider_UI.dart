@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ProviderUI with ChangeNotifier {
-  bool _isGridView = true;
+  var _isGridView = true;
 
   bool get isGridView {
     return _isGridView ? true : false;
   }
+
 
   void setGridView() {
     _isGridView = true;

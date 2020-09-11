@@ -82,11 +82,13 @@ class Summary extends StatelessWidget {
               Text('Total', style: TextStyle(fontSize: 20)),
               Chip(
                 label: Text(totalAmount.toStringAsFixed(2), style: textStyle),
-                backgroundColor: theme.primaryColor,
+                backgroundColor:
+                    totalAmount > 0 ? theme.primaryColor : theme.disabledColor,
                 elevation: 5,
                 avatar: CircleAvatar(
                   child: Text('€', style: textStyle),
-                  backgroundColor: theme.accentColor,
+                  backgroundColor:
+                      totalAmount > 0 ? theme.accentColor : theme.dividerColor,
                 ),
               ),
             ],

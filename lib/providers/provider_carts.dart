@@ -79,6 +79,30 @@ class ProviderCarts with ChangeNotifier {
     notifyListeners();
   }
 
+  void removeOneItem({@required id}) {
+    _items.update(id, (oldCart) {
+      return Cart(
+        id: id,
+        price: oldCart.price,
+        title: oldCart.title,
+        quantity: oldCart.quantity - 1,
+      );
+    });
+    notifyListeners();
+  }
+
+  void addOneItem({@required id}) {
+    _items.update(id, (oldCart) {
+      return Cart(
+        id: id,
+        price: oldCart.price,
+        title: oldCart.title,
+        quantity: oldCart.quantity + 1,
+      );
+    });
+    notifyListeners();
+  }
+
   bool findById({@required String id}) {
     return _items.containsKey(id);
   }

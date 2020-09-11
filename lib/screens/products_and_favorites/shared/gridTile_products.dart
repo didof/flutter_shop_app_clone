@@ -22,17 +22,44 @@ class ProductItemGridTile extends StatelessWidget {
     provider.toggleFavorite(product.id);
   }
 
+  SnackBar _buildSnackbar(
+      {@required String id, @required ProviderCarts provider, String title}) {
+    return SnackBar(
+      content: Text('${title != null ? title : 'the item'} was added to cart'),
+      action: SnackBarAction(
+        label: 'undo',
+        onPressed: () => undoShoppingCartTap(
+          id: id,
+          provider: provider,
+        ),
+      ),
+    );
+  }
+
+  void undoShoppingCartTap({
+    @required String id,
+    @required ProviderCarts provider,
+  }) {
+    provider.removeOneItem(id: id);
+  }
+
   void onShoppingCartTap({
     @required ProviderCarts provider,
     @required String id,
     @required String title,
     @required double price,
+    @required BuildContext context,
   }) {
     provider.addItem(
       id: id,
       title: title,
       price: price,
     );
+    Scaffold.of(context).showSnackBar(_buildSnackbar(
+      provider: provider,
+      title: title,
+      id: id,
+    ));
   }
 
   bool isInCart({@required ProviderCarts provider, @required String id}) {
@@ -90,6 +117,7 @@ class ProductItemGridTile extends StatelessWidget {
                     id: product.id,
                     title: product.title,
                     price: product.price,
+                    context: context,
                   ),
                   theme: theme,
                 ),

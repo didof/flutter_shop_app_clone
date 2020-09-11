@@ -25,7 +25,6 @@ class ScreenOrders extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final provider = Provider.of<ProviderOrders>(context);
 
     return Scaffold(
       appBar: AppBar(),

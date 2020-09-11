@@ -1,12 +1,15 @@
 // flutter
 import 'package:flutter/material.dart';
 import 'package:shop_app/widgets/drawer.dart';
+import 'package:shop_app/widgets/responsive_safe_area.dart';
 // sub screens
 import 'productsOverview/subscreen_productsOverview.dart';
 import 'favorites/subscreen_favorites.dart';
 // appBar actions
 import 'actions/popupMenuButton.dart';
 import 'actions/cartActionButton.dart';
+import 'subscreens/favorites/subscreen_favorites.dart';
+import 'subscreens/productsOverview/subscreen_productsOverview.dart';
 
 class ScreenProductsAndFavorites extends StatefulWidget {
   static const routeName = '/';
@@ -69,10 +72,12 @@ class _ScreenProductsAndFavoritesState
                 PopupMenuButtonProductsOverview(),
               ],
             ),
-            body: TabBarView(
-              children:
-                  choices.map<Widget>((TabBarChoice c) => c.screen).toList(),
-            ),
+            body: ResponsiveSafeArea(builder: (context, size) {
+              return TabBarView(
+                children:
+                    choices.map<Widget>((TabBarChoice c) => c.screen).toList(),
+              );
+            }),
             drawer: CustomDrawer(),
           );
         },
