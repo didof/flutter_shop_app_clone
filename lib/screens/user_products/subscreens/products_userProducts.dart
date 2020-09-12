@@ -106,10 +106,13 @@ class ListItem extends StatelessWidget {
                       onPressed: () => onEdit(1, productId: id),
                       color: theme.primaryColor,
                     ),
-                    IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () {},
-                      color: theme.errorColor,
+                    Consumer<ProviderProducts>(
+                      builder: (context, provider, child) => IconButton(
+                        icon: child,
+                        onPressed: () => provider.removeProduct(id),
+                        color: theme.errorColor,
+                      ),
+                      child: Icon(Icons.delete),
                     ),
                   ],
                 ),
