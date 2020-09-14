@@ -23,11 +23,11 @@ class _ScreenUserProductsState extends State<ScreenUserProducts> {
     if (i == 0) {
       return ProductsUserProducts(shiftTab: _shiftTab);
     } else {
-      return EditorUserProducts(id: _editorProductId);
+      return EditorUserProducts(id: _editorProductId, shiftTab: _shiftTab);
     }
   }
 
-  void _shiftTab(int index, {String productId = ''}) {
+  void _shiftTab(int index, {String productId = 'empty'}) {
     setState(() {
       _currentIndex = index;
       _editorProductId = productId;

@@ -1,9 +1,13 @@
 // flutter
 import 'package:flutter/material.dart';
+import 'dart:convert';
 // model
 import '../models/model_product.dart';
 // data
 import '../assets/data/data_products.dart';
+import 'package:shop_app/database/url.dart';
+// external
+import 'package:http/http.dart' as http;
 
 class ProviderProducts with ChangeNotifier {
   List<Product> _products = databaseProducts;
@@ -29,16 +33,34 @@ class ProviderProducts with ChangeNotifier {
     notifyListeners();
   }
 
-  void addProduct(Product product) {
-    final newProduct = Product(
-      id: DateTime.now().toString(),
-      title: product.title,
-      description: product.description,
-      price: product.price,
-      imageUrl: product.imageUrl,
-    );
-    _products.add(newProduct);
-    notifyListeners();
+  Future<void> addProduct(Product product) async {
+    try {
+      final response = await http.post(
+        DatabaseUrl.url_products,
+        body: json.encode({
+          'title': product.title,
+          'description': product.description,
+          'imageUrl': product.imageUrl,
+          'price': product.price,
+          'isFavorite': product.isFavorite,
+        }),
+      );
+
+      final newProduct = Product(
+        id: json.decode(response.body)['name'],
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageUrl: product.imageUrl,
+      );
+
+      _products.add(newProduct);
+
+      notifyListeners();
+    } catch (error) {
+      print(error);
+      throw error;
+    }
   }
 
   void updateProduct(Product updatedProduct) {
