@@ -55,4 +55,37 @@ class ProviderOrders with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> fetchAndSetOrders() async {
+    try {
+      final response = await http.get(DatabaseUrl.url_orders);
+      final extracted = json.decode(response.body) as Map<String, dynamic>;
+      List<Order> loadedOrders = [];
+      if (extracted == null) {
+        _orders = [];
+        return;
+      }
+      extracted.forEach((id, order) {
+        loadedOrders.add(
+          Order(
+              id: id,
+              amount: order['amount'],
+              dateTime: DateTime.parse(order['dateTime']),
+              products: (order['products'] as List<dynamic>).map((p) {
+                return Cart(
+                  id: p['id'],
+                  title: p['title'],
+                  price: p['price'],
+                  quantity: p['quantity'],
+                );
+              }).toList()),
+        );
+      });
+      _orders = loadedOrders;
+    } catch (error) {
+      print('[ProviderOrders] fetchAndSetOrders error $error');
+    } finally {
+      notifyListeners();
+    }
+  }
 }

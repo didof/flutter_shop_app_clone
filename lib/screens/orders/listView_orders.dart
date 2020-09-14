@@ -6,20 +6,39 @@ import 'package:provider/provider.dart';
 import 'package:shop_app/models/model_order.dart';
 import 'package:shop_app/providers/provider_orders.dart';
 
-class ListViewOrders extends StatelessWidget {
+class ListViewOrders extends StatefulWidget {
   const ListViewOrders({Key key}) : super(key: key);
+
+  @override
+  _ListViewOrdersState createState() => _ListViewOrdersState();
+}
+
+class _ListViewOrdersState extends State<ListViewOrders> {
+  @override
+  void initState() {
+    Provider.of<ProviderOrders>(context, listen: false).fetchAndSetOrders();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ProviderOrders>(context);
 
-    return ListView.builder(
-      itemCount: provider.amount,
-      itemBuilder: (context, i) {
-        return ListItemOrder(
-          order: provider.data[i],
-        );
+    // if (provider.amount < 1)
+    //   return CircularProgressIndicator();
+    // else
+    return RefreshIndicator(
+      onRefresh: () {
+        return provider.fetchAndSetOrders();
       },
+      child: ListView.builder(
+        itemCount: provider.amount,
+        itemBuilder: (context, i) {
+          return ListItemOrder(
+            order: provider.data[i],
+          );
+        },
+      ),
     );
   }
 }
