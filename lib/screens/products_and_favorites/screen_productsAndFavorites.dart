@@ -2,9 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/widgets/drawer.dart';
 import 'package:shop_app/widgets/responsive_safe_area.dart';
-// sub screens
-import 'productsOverview/subscreen_productsOverview.dart';
-import 'favorites/subscreen_favorites.dart';
 // appBar actions
 import 'actions/popupMenuButton.dart';
 import 'actions/cartActionButton.dart';

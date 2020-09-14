@@ -1,4 +1,4 @@
-import 'dart:async';
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -87,6 +87,40 @@ class _EditorUserProductsState extends State<EditorUserProducts> {
     width: 30,
   );
 
+  void _buildDialog(BuildContext context) {
+    showDialog<Null>(
+      context: context,
+      barrierDismissible: false,
+      child: AlertDialog(
+        elevation: 5,
+        title: Text('Something went wrong'),
+        content: Text('try again later... :('),
+        actions: [
+          OutlineButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Okay'),
+          )
+        ],
+      ),
+    );
+  }
+
+  String _pickAnImage() {
+    const base = 'https://cdn.pixabay.com/photo/';
+    const List<String> images = const [
+      '2018/11/15/11/35/family-3817055_1280.jpg',
+      '2016/11/14/03/43/asia-1822520_1280.jpg',
+      '2018/01/11/09/52/blonde-3075756_1280.jpg',
+      '2018/01/11/09/51/woman-3075743_1280.jpg',
+      '2018/02/20/20/52/people-3168830_1280.jpg'
+    ];
+    final picked = base + images[Random().nextInt(images.length)];
+    print(picked);
+    return picked;
+  }
+
   void _saveForm() async {
     print('[save form]:starting $_isLoading');
     setState(() {
@@ -108,31 +142,23 @@ class _EditorUserProductsState extends State<EditorUserProducts> {
         await provider.addProduct(_editedProduct);
         widget.shiftTab(0);
       } catch (error) {
-        showDialog<Null>(
-          context: context,
-          barrierDismissible: false,
-          child: AlertDialog(
-            elevation: 5,
-            title: Text('Something went wrong'),
-            content: Text('try again later... :('),
-            actions: [
-              OutlineButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('Okay'),
-              )
-            ],
-          ),
-        );
+        _buildDialog(context);
       } finally {
         setState(() {
           _isLoading = false;
         });
       }
     } else {
-      provider.updateProduct(_editedProduct);
-      widget.shiftTab(0);
+      try {
+        await provider.updateProduct(widget.id, _editedProduct);
+        widget.shiftTab(0);
+      } catch (error) {
+        _buildDialog(context);
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -280,8 +306,7 @@ class _EditorUserProductsState extends State<EditorUserProducts> {
                             prefixIcon: IconButton(
                               icon: Icon(Icons.image),
                               onPressed: () {
-                                _imageUrlController.text =
-                                    'https://cdn.pixabay.com/photo/2018/11/15/11/35/family-3817055_1280.jpg';
+                                _imageUrlController.text = _pickAnImage();
                               },
                             ),
                           ),
